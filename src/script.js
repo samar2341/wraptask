@@ -10,13 +10,13 @@ inputTask.focus()
 
 
 //save task to local storage 
-function saveTasks(task){
+function saveTasks(task, timestamp){
 
     //calling getTask() function into tasks variable where we're getting tasks from local storage
     const tasks = getTasks()
     
-    //pushing argumneted task into tasks variable via getTask
-    tasks.push(task);
+    //pushing argumneted task into tasks variable via getTask as an object with task and timestamp
+    tasks.push({ text: task, time: timestamp });
 
     //setting item into local storage in form of JSON
     localStorage.setItem('tasks',JSON.stringify(tasks))
@@ -48,11 +48,8 @@ function loadTasks() {
         //creating the list item
         const listItem = document.createElement("li");
 
-        //creating the current time event
-        const currentTime = new Date().toLocaleDateString();
-
         // inputText / inputTask is not available inside this function so the task element is used where all the tasks are loaded  
-        listItem.innerHTML = `<span> •  ${task}</span><span class="time">${currentTime}</span>`;
+        listItem.innerHTML = `<span> •  ${task.text}</span><span class="time">${task.time}</span>`;
 
         //adding event listener to the list item to check the completion and pending activity
         listItem.addEventListener("click", function() {
@@ -85,7 +82,7 @@ function addTask(){
         //creating the list item
         const listItem = document.createElement("li");
 
-        //creating the current time event
+        //creating the current time event - capture once when task is added
         const currentTime = new Date().toLocaleTimeString();
 
         //creating innerhtml of element created in name of listItem to append on the task list 
@@ -108,8 +105,8 @@ function addTask(){
         //appending the child element we created the innerhtml of the list item to the task list
         taskList.appendChild(listItem);
 
-        //saving task intro local storage
-        saveTasks(inputText);
+        //saving task with timestamp into local storage
+        saveTasks(inputText, currentTime);
 
         //scrolls to the bottom
         scrollBottom()
